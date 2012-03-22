@@ -200,11 +200,15 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
    G = _fmpz_vec_init(glen);
    
    printf("\n");
+   printf("glen1: %lu\n", (limbsg*FLINT_BITS)/pack_bits + 1);
+   printf("glen2: %lu\n", len2);
    /* printf("G: ");fmpz_print(G);printf("\n"); */
    printf("glen: %lu\n", glen);
-   gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, 1, 1);
+   gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, limbsg, limbsg);
    printf("pack_bits: %lu\n", pack_bits);
    printf("---\n");
+
+	arrayg[limbsg] = 0;
 
    /* unpack gcd */
    _fmpz_poly_bit_unpack(G, glen, arrayg, pack_bits, 0);

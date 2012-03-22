@@ -41,6 +41,24 @@ main(void)
 
     flint_randinit(state);
 
+    fmpz_t a, b;
+    mp_bitcnt_t bits = 256;
+    mp_ptr arr = (mp_ptr) flint_calloc(1, sizeof(mp_limb_t));
+    fmpz_init_set_ui(a, 1);
+    fmpz_init(b);
+
+    fmpz_bit_pack(arr, 0, bits, a, 0, 0);
+    fmpz_bit_unpack(b, arr, 0, bits, 0, 0);
+
+    result = (fmpz_cmp(a, b) == 0);
+    if (!result)
+    {
+        printf("FAIL:\n");
+        fmpz_print(a), printf("\n");
+        fmpz_print(b), printf("\n");
+        abort();
+    }
+
     for (i = 0; i < 500000; i++)
     {
         fmpz_t a, b;
@@ -54,6 +72,12 @@ main(void)
         fmpz_init(b);
 
         fmpz_randtest(a, state, bits - 1); /* need one bit for sign */
+        if(bits>1)
+            fmpz_one(a);
+        //fmpz_tdiv_q_ui(a, a, 10000);
+        //fmpz_tdiv_q_2exp(a, a, bits-2);
+        fmpz_print(a);printf(" %ld\n", bits);
+        //fmpz_set_ui(a, 31337);
 
         arr[0] = n_randbits(state, shift);
 

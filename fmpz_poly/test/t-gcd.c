@@ -45,7 +45,7 @@ main(void)
 
     /* Check aliasing of a and b */
     for (i = 0; i < 500; i++)
-    {
+    {   
         fmpz_poly_t a, b, c;
 
         fmpz_poly_init(a);
@@ -53,7 +53,7 @@ main(void)
         fmpz_poly_init(c);
         fmpz_poly_randtest(b, state, n_randint(state, 40), 80);
         fmpz_poly_randtest(c, state, n_randint(state, 40), 80);
-
+		
         fmpz_poly_gcd(a, b, c);
         fmpz_poly_gcd(b, b, c);
 
@@ -98,6 +98,8 @@ main(void)
         fmpz_poly_clear(b);
         fmpz_poly_clear(c);
     }
+
+	printf("B\n");
 
     /* Check that a divides GCD(af, ag) */
     for (i = 0; i < 500; i++)

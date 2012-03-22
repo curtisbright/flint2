@@ -48,7 +48,10 @@ mp_size_t mpn_tdiv_q_fmpz_inplace(mp_ptr arrayg, mp_size_t limbsg, fmpz_t gc)
       
       mp_ptr temp = flint_malloc(limbsg*sizeof(mp_limb_t));
       mpn_copyi(temp, arrayg, limbsg);
-      
+
+	gmp_printf ("TEMP: %Nd (%lu limbs)\n", temp, limbsg, limbsg);
+	gmp_printf ("D: %Nd (%lu limbs)\n", mpz_ptr->_mp_d, mpz_ptr->_mp_size, mpz_ptr->_mp_size);
+
       mpn_tdiv_q(arrayg, temp, limbsg, mpz_ptr->_mp_d, mpz_ptr->_mp_size);
       tlimbs = limbsg - mpz_ptr->_mp_size + 1;
       tlimbs -= (arrayg[tlimbs - 1] == 0);
@@ -89,7 +92,7 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
    ulong limbs1, limbs2, limbsg, pack_limbs, qlimbs;
    ulong log_glen, log_length;
    long sign1, sign2, glen, qlen;
-	fmpz_t ac, bc, d, gc;
+   fmpz_t ac, bc, d, gc;
    fmpz * A, * B, * G, * Q, * t;
    mp_ptr array1, array2, arrayg, q, temp;
    int divides;
@@ -191,13 +194,29 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
    glen = FLINT_MIN((limbsg*FLINT_BITS)/pack_bits + 1, len2); 
    G = _fmpz_vec_init(glen);
    
+   printf("\n");
+   /* printf("G: ");fmpz_print(G);printf("\n"); */
+   printf("glen: %lu\n", glen);
+   gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, 1, 1);
+   printf("pack_bits: %lu\n", pack_bits);
+   printf("---\n");
+
    /* unpack gcd */
    _fmpz_poly_bit_unpack(G, glen, arrayg, pack_bits, 0);
-   while (G[glen - 1] == 0) glen--;
+   /*while (G[glen - 1] == 0) glen--;*/
+
+   printf("G unpacked: ");fmpz_print(G);printf("\n");
    
-	/* divide by any content */
+   /* divide by any content */
    fmpz_init(gc);
-	_fmpz_poly_content(gc, G, glen);
+   _fmpz_poly_content(gc, G, glen);
+
+   /*printf("\n");
+   printf("G: ");fmpz_print(G);printf("\n");
+   printf("glen: %lu\n", glen);
+   gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, limbsg, limbsg);
+   printf("gc: ");fmpz_print(gc);printf("\n");
+   printf("---\n");/*/
 
    if (!fmpz_is_one(gc)) 
       limbsg = mpn_tdiv_q_fmpz_inplace(arrayg, limbsg, gc);

@@ -87,5 +87,6 @@ mp_size_t mpn_gcd_full(mp_ptr arrayg,
    if (b2) flint_free(in2);
 
    /* return total number of limbs in output */
+   /* printf("TOTAL NUMBER OF LIMBS IN OUTPUT: %lu\n", m+leng); */
    return m + leng;
 }

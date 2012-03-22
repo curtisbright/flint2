@@ -184,6 +184,11 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
    _fmpz_poly_bit_pack(array2, B, len2, pack_bits, sign2);
 	while (array2[limbs2 - 1] == 0) limbs2--;
 	
+   printf("\n");
+   gmp_printf ("array1: %Nd (%lu limbs)\n", array1, limbs1, limbs1);
+   gmp_printf ("array2: %Nd (%lu limbs)\n", array2, limbs2, limbs2);
+   gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, limbsg, limbsg);
+
 	/* compute integer GCD */
    limbsg = mpn_gcd_full(arrayg, array1, limbs1, array2, limbs2);
 	
@@ -203,7 +208,7 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
 
    /* unpack gcd */
    _fmpz_poly_bit_unpack(G, glen, arrayg, pack_bits, 0);
-   /*while (G[glen - 1] == 0) glen--;*/
+   while (G[glen - 1] == 0) glen--;
 
    printf("G unpacked: ");fmpz_print(G);printf("\n");
    
@@ -216,7 +221,7 @@ _fmpz_poly_gcd_heuristic(fmpz * res, const fmpz * poly1, long len1,
    printf("glen: %lu\n", glen);
    gmp_printf ("arrayg: %Nd (%lu limbs)\n", arrayg, limbsg, limbsg);
    printf("gc: ");fmpz_print(gc);printf("\n");
-   printf("---\n");/*/
+   printf("---\n");*/
 
    if (!fmpz_is_one(gc)) 
       limbsg = mpn_tdiv_q_fmpz_inplace(arrayg, limbsg, gc);

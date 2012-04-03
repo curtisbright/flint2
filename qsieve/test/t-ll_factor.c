@@ -22,7 +22,7 @@
     Copyright (C) 2009, 2011 William Hart
 
 ******************************************************************************/
-
+#define QS_DEBUG 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpir.h>
@@ -64,6 +64,8 @@ int main(void)
       
       fmpz_fdiv_q_2exp(t, n, FLINT_BITS);
       hi = fmpz_get_ui(t);
+
+		fmpz_print(n); printf(" = %ld * %ld\n", fac1, fac2);
 
       fac = qsieve_ll_factor(hi, lo);
 

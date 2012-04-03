@@ -22,7 +22,7 @@
     Copyright (C) 2006, 2011 William Hart
 
 ******************************************************************************/
-
+#define QS_DEBUG 1
 #include <stdio.h>
 #include <mpir.h>
 #include <math.h>

@@ -22,7 +22,7 @@
     Copyright (C) 2006, 2011 William Hart
 
 ******************************************************************************/
-
+#define QS_DEBUG 1
 #undef ulong /* avoid clash with stdlib */
 #include <stdlib.h>
 #include <stdio.h>

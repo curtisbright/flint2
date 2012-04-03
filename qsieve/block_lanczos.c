@@ -31,7 +31,7 @@ The following modifications were made by William Hart:
     -reformatted original code so it would operate as a standalone 
      filter and block Lanczos module
 --------------------------------------------------------------------*/
-
+#define QS_DEBUG 1
 
 #undef ulong /* avoid clash with stdlib */
 #include <string.h>

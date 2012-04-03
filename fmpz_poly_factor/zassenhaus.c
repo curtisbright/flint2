@@ -108,7 +108,7 @@ void _fmpz_poly_factor_zassenhaus(fmpz_poly_factor_t final_fac,
 
     #if TRACE_ZASSENHAUS == 1
     printf("\n[Zassenhaus]\n");
-    printf("|f = "), fmpz_poly_print(f), printf("\n");
+    printf("|f = "), fmpz_poly_print(f), printf("\n lenF = %li\n", lenF);
     #endif
 
     if (lenF == 2)
@@ -119,7 +119,7 @@ void _fmpz_poly_factor_zassenhaus(fmpz_poly_factor_t final_fac,
     {
         long i;
         long r = lenF;
-        mp_limb_t p = 2;
+        mp_limb_t p = 1;
         nmod_poly_t d, g, t;
         nmod_poly_factor_t fac;
 
@@ -128,16 +128,21 @@ void _fmpz_poly_factor_zassenhaus(fmpz_poly_factor_t final_fac,
         nmod_poly_init_preinv(d, 0, 0);
         nmod_poly_init_preinv(g, 0, 0);
 
+			/*printf("p = %li, r = %li\n", p, r);*/
+
         for (i = 0; i < 3; i++)
-        {
-            for ( ; ; p = n_nextprime(p, 0))
+        {	
+            for (p = n_nextprime(p, 0) ; ; p = n_nextprime(p, 0))
             {
                 nmod_t mod;
+
+					/*printf("p = %li, r = %li\n", p, r);*/
 
                 nmod_init(&mod, p);
                 d->mod = mod;
                 g->mod = mod;
                 t->mod = mod;
+
 
                 fmpz_poly_get_nmod_poly(t, f);
                 if (t->length == lenF)
@@ -155,17 +160,22 @@ void _fmpz_poly_factor_zassenhaus(fmpz_poly_factor_t final_fac,
                         if (temp_fac->num <= r)
                         {
                             r = temp_fac->num;
+									/*printf("\tp = %li, r = %li\n", p, r);*/
                             nmod_poly_factor_set(fac, temp_fac);
                         }
                         nmod_poly_factor_clear(temp_fac);
-                        break;
+								break;
                     }
                 }
             }
+				p = n_nextprime(p, 0);
+				/*printf("OUTER: p = %li, r = %li\n", p, r);*/
         }
         nmod_poly_clear(d);
         nmod_poly_clear(g);
         nmod_poly_clear(t);
+
+			/*printf("---\n");*/
 
         if (r > cutoff)
         {

@@ -476,13 +476,13 @@ static long find_nonsingular_sub(uint64_t *t, long *s,
 	mask = 0;
 	for (i = 0; i < dim; i++)
 	{	mask |= bitmask[s[i]];
-		printf("%i: %li\n", i, s[i]);
+		/*printf("%i: %li\n", i, s[i]);*/
 	}
 	for (i = 0; i < last_dim; i++)
 	{	mask |= bitmask[last_s[i]];
-		printf("%i: %li\n", i, last_s[i]);
+		/*printf("%i: %li\n", i, last_s[i]);*/
 	}
-	printf("--- %i %i ---\n", dim, last_dim);
+	/*printf("--- %i %i ---\n", dim, last_dim);*/
 
 	if (mask != (uint64_t)(-1)) {
 #if (QS_DEBUG & 128)
@@ -844,7 +844,7 @@ uint64_t * block_lanczos(flint_rand_t state, long nrows,
 		dim0 = find_nonsingular_sub(vt_a_v[0], s[0], 
 					    s[1], dim1, winv[0]);
 
-		printf("iter: %li, dim0: %li\n", iter, dim0);
+		/*printf("iter: %li, dim0: %li\n", iter, dim0);*/
 
 		if (dim0 == 0)
 			break;

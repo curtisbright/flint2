@@ -32,8 +32,6 @@
 #include "qsieve.h"
 #include "fmpz.h"
 
-#define QS_DEBUG 255
-
 /* 
    Factor n = (hi, lo). Returns a factor of n. 
    Assumes n is not prime and not a perfect power.

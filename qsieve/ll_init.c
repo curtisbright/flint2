@@ -22,7 +22,6 @@
     Copyright (C) 2006, 2011 William Hart
 
 ******************************************************************************/
-#define QS_DEBUG 1
 #include <mpir.h>
 #include "flint.h"
 #include "ulong_extras.h"

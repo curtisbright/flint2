@@ -47,7 +47,7 @@
       64  - print information about the number of duplicate relations
       128 - print lanczos information and errors
 */
-#define QS_DEBUG 255
+#define QS_DEBUG 0
 
 #define CACHE_SIZE 65536 /* size of L1 cache */
 

@@ -795,7 +795,9 @@ uint64_t * block_lanczos(flint_rand_t state, long nrows,
 #if FLINTBITS==64
 		v[0][i] = (uint64_t)(n_randlimb(state));
 #else
-		v[0][i] = (uint64_t)(n_randlimb(state) + ((uint64_t)n_randlimb(state) << 32));
+	{	v[0][i] = (uint64_t)(n_randlimb(state) + ((uint64_t)n_randlimb(state) << 32));
+		printf("v[0][%li]: %llX\n", i, v[0][i]);
+	}
 #endif
 
 	memcpy(x, v[0], vsize * sizeof(uint64_t));

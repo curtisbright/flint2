@@ -29,13 +29,10 @@
 #include <mpir.h>
 #include "flint.h"
 #include "fmpz.h"
+#include <stdint.h>
 
 #ifdef __cplusplus
  extern "C" {
-#endif
-
-#ifndef uint64_t
-#define uint64_t unsigned long
 #endif
 
 /* 
@@ -50,7 +47,7 @@
       64  - print information about the number of duplicate relations
       128 - print lanczos information and errors
 */
-#define QS_DEBUG 0
+#define QS_DEBUG 255
 
 #define CACHE_SIZE 65536 /* size of L1 cache */
 

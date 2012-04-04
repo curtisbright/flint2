@@ -31,7 +31,6 @@ The following modifications were made by William Hart:
     -reformatted original code so it would operate as a standalone 
      filter and block Lanczos module
 --------------------------------------------------------------------*/
-#define QS_DEBUG 1
 
 #undef ulong /* avoid clash with stdlib */
 #include <string.h>
@@ -232,7 +231,9 @@ static void precompute_Nx64_64x64(uint64_t *x, uint64_t *c) {
 	   table can dramatically speed up matrix multiplies
 	   by x[][]. */
 
-	uint64_t accum, xk;
+	uint64_t accum, xk;/* Poor man's random number generator. It satisfies no 
+      particularly good randomness properties, but is good
+      enough for this application */
 	unsigned long i, j, k, index;
 
 	for (j = 0; j < 8; j++) {
@@ -362,6 +363,7 @@ static long find_nonsingular_sub(uint64_t *t, long *s,
 	for (i = 0; i < 64; i++) {
 		M[i][0] = t[i]; 
 		M[i][1] = bitmask[i];
+		/*printf("t[%li]: %llX\n", i, t[i]);*/
 	}
 
 	/* put the column indices from last_s[] into the
@@ -386,6 +388,9 @@ static long find_nonsingular_sub(uint64_t *t, long *s,
 
 		mask = bitmask[cols[i]];
 		row_i = M[cols[i]];
+
+		/*printf("mask %li: %llX\n", i, mask);*/
+		/*printf("row_%li: %llX\n", i, *row_i);*/
 
 		for (j = i; j < 64; j++) {
 			row_j = M[cols[j]];
@@ -470,13 +475,20 @@ static long find_nonsingular_sub(uint64_t *t, long *s,
 
 	mask = 0;
 	for (i = 0; i < dim; i++)
-		mask |= bitmask[s[i]];
+	{	mask |= bitmask[s[i]];
+		printf("%i: %li\n", i, s[i]);
+	}
 	for (i = 0; i < last_dim; i++)
-		mask |= bitmask[last_s[i]];
+	{	mask |= bitmask[last_s[i]];
+		printf("%i: %li\n", i, last_s[i]);
+	}
+	printf("--- %i %i ---\n", dim, last_dim);
 
 	if (mask != (uint64_t)(-1)) {
 #if (QS_DEBUG & 128)
-		printf("lanczos error: not all columns used\n");
+		printf("lanczos error: not all columns used %llX\n", mask);
+	/*for(i=0; i<64; i++)
+		printf("%i: %llX\n", i, bitmask[i]);*/
 #endif
 		return 0;
 	}
@@ -780,7 +792,11 @@ uint64_t * block_lanczos(flint_rand_t state, long nrows,
 	   of v[0] must be saved off separately */
 
 	for (i = 0; i < n; i++)
-		v[0][i] = (uint64_t) n_randlimb(state);
+#if FLINTBITS==64
+		v[0][i] = (uint64_t)(n_randlimb(state));
+#else
+		v[0][i] = (uint64_t)(n_randlimb(state) + ((uint64_t)n_randlimb(state) << 32));
+#endif
 
 	memcpy(x, v[0], vsize * sizeof(uint64_t));
 	mul_MxN_Nx64(vsize, dense_rows, ncols, B, v[0], scratch);
@@ -790,6 +806,7 @@ uint64_t * block_lanczos(flint_rand_t state, long nrows,
 	/* perform the iteration */
 
 	while (1) {
+		
 		iter++;
 
 		/* multiply the current v[0] by a symmetrized
@@ -819,8 +836,16 @@ uint64_t * block_lanczos(flint_rand_t state, long nrows,
 		   of v0'*A*v0, invert it, and list the column
 		   indices present in the submatrix */
 
+#if 0
+		for(i=0; i<64; i++)
+			printf("vt_a_v[%li]: %llX\n", i, (vt_a_v[i]));
+#endif
+
 		dim0 = find_nonsingular_sub(vt_a_v[0], s[0], 
 					    s[1], dim1, winv[0]);
+
+		printf("iter: %li, dim0: %li\n", iter, dim0);
+
 		if (dim0 == 0)
 			break;
 

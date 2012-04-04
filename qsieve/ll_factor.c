@@ -22,7 +22,6 @@
     Copyright (C) 2006, 2011 William Hart
 
 ******************************************************************************/
-#define QS_DEBUG 1
 #undef ulong /* avoid clash with stdlib */
 #include <stdio.h>
 #define ulong unsigned long 
@@ -33,7 +32,7 @@
 #include "qsieve.h"
 #include "fmpz.h"
 
-#define QS_DEBUG 1
+#define QS_DEBUG 255
 
 /* 
    Factor n = (hi, lo). Returns a factor of n. 

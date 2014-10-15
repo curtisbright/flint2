@@ -45,10 +45,13 @@ int main(void)
 		fmpz_lll_t fl;
 		flint_rand_t rnd;
 		fmpz_mat_t A;
+		fmpz_mat_t B;
 		FLINT_TEST_INIT(state);
 		fmpz_mat_init(A, dim, dim);
+		fmpz_mat_init(B, dim, dim);
 		fmpz_lll_context_init(fl, delta, eta, 1, 0);
-		fmpz_mat_randajtai(A, state, 1.5);
+		fmpz_mat_randajtai(A, state, 1.25);
+		fmpz_mat_set(B, A);
 
 		char buf[L_tmpnam];
 		tmpnam(buf);
@@ -67,12 +70,18 @@ int main(void)
 
 		timeit_t t1;
 		timeit_start(t1);
-		lllReduction(M, (delta+1)/2, (2*eta+1)/4, LM_WRAPPER);
+		fmpz_lll(B, NULL, fl);
 		timeit_stop(t1);
 
-		flint_printf("dim = %wd flint/fplll %wd %wd (ms) ratio %0.2f\n", dim, t0->wall, t1->wall, (double)t0->wall/t1->wall);
+		timeit_t t2;
+		timeit_start(t2);
+		lllReduction(M, (delta+1)/2, (2*eta+1)/4, LM_WRAPPER);
+		timeit_stop(t2);
+
+		flint_printf("dim = %wd flint/ulll/fplll %wd %wd %wd (ms) fplll-ratio %0.2f %0.2f\n", dim, t0->wall, t1->wall, t2->wall, (double)t0->wall/t2->wall, (double)t1->wall/t2->wall);
 
 		fmpz_mat_clear(A);
+		fmpz_mat_clear(B);
 		flint_randclear(state);
 	}
 

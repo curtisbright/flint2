@@ -78,7 +78,7 @@ int main(void)
 		lllReduction(M, (delta+1)/2, (2*eta+1)/4, LM_WRAPPER);
 		timeit_stop(t2);
 
-		flint_printf("dim = %wd flint/ulll/fplll %wd %wd %wd (ms) fplll-ratio %0.2f %0.2f\n", dim, t0->wall, t1->wall, t2->wall, (double)t0->wall/t2->wall, (double)t1->wall/t2->wall);
+		flint_printf("dim = %wd wrapper/ulll/fplll %wd %wd %wd (ms) fplll-ratio %0.2f %0.2f\n", dim, t0->wall, t1->wall, t2->wall, (double)t0->wall/t2->wall, (double)t1->wall/t2->wall);
 
 		fmpz_mat_clear(A);
 		fmpz_mat_clear(B);
